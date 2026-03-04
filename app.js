@@ -9,6 +9,8 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const authRoutes = require("./routes/authRoutes");
 
+const kitRoutes = require("./routes/kitRoutes");
+
 
 const app = express();
 
@@ -22,6 +24,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the GateBytes API!");
 });
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/kits", kitRoutes);
 
 //Error middleware
 app.use(notFoundMiddleware);
