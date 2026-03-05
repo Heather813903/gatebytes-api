@@ -16,6 +16,16 @@ const createKitItem = async (req, res) => {
   res.status(201).json({ item });
 };
 
+const getLowStockItems = async (req, res) => {
+
+  const items = await KitItem.find({
+    user: req.user.userId,
+    $expr: { $lte: ["$quantity", "$lowStockThreshold"] }
+  });
+
+  res.status(200).json({ count: items.length, items });
+
+};
 
 const getAllKitItems = async (req, res) => {
   const items = await KitItem.find({ user: req.user.userId }).sort("createdAt");
@@ -70,4 +80,5 @@ module.exports = {
   getKitItem,
   updateKitItem,
   deleteKitItem,
+  getLowStockItems,
 };
