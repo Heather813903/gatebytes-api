@@ -21,7 +21,7 @@ const KitItemSchema = new mongoose.Schema(
         },
         category: {
             type: String,
-            enum: ["snack","meal","drink","other"],
+            enum: ["snack","meal","drink","other","breakfast","lunch","dinner"],
             default: "other",   
         },
 
