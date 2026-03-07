@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header small-header">
+    <div class="overlay">
+      <h1 class="logo">✈ GateBytes</h1>
+      <p class="tagline">Flight-ready meal kit tracker</p>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content dashboard-main">
+    <section class="dashboard-top">
+      <div>
+        <h2>Your Meal Kit Dashboard</h2>
+        <p>Track your travel-ready food items and monitor low stock before your next trip.</p>
+      </div>
+      <button class="primary-btn">+ Add Item</button>
+    </section>
+
+    <section class="card-grid">
+      <article class="item-card">
+        <div class="item-header">
+          <h3>Protein Bars</h3>
+          <span class="badge low">Low Stock</span>
+        </div>
+        <p><strong>Quantity:</strong> 1</p>
+        <p><strong>Threshold:</strong> 2</p>
+        <p><strong>Category:</strong> Snack</p>
+        <div class="card-actions">
+          <button class="secondary-btn">Edit</button>
+          <button class="danger-btn">Delete</button>
+        </div>
+      </article>
+
+      <article class="item-card">
+        <div class="item-header">
+          <h3>Instant Oatmeal</h3>
+          <span class="badge ok">In Stock</span>
+        </div>
+        <p><strong>Quantity:</strong> 3</p>
+        <p><strong>Threshold:</strong> 1</p>
+        <p><strong>Category:</strong> Breakfast</p>
+        <div class="card-actions">
+          <button class="secondary-btn">Edit</button>
+          <button class="danger-btn">Delete</button>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

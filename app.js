@@ -42,6 +42,19 @@ app.use(limiter);
 app.get("/", (req, res) => {
   res.render("layout", { title: "GateBytes" });
 });
+
+app.get("/login", (req, res) => {
+  res.render("login", { title: "Login - GateBytes" });
+});
+
+app.get("/register", (req, res) => {
+  res.render("register", { title: "Register - GateBytes" });
+});
+
+app.get("/dashboard", (req, res) => {
+  res.render("dashboard", { title: "Dashboard - GateBytes" });
+});
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/kits", kitRoutes);
 
