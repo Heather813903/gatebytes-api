@@ -19,10 +19,14 @@ const rateLimit = require("express-rate-limit");
 
 const app = express();
 
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
   max: 100, 
 });
+
+app.set("view engine", "ejs");  
+app.use(express.static("public"));
 
 // Middleware
 app.use(express.json());
@@ -36,7 +40,7 @@ app.use(limiter);
 
 // Routes
 app.get("/", (req, res) => {
-  res.send("Welcome to the GateBytes API!");
+  res.render("layout", { title: "GateBytes" });
 });
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/kits", kitRoutes);
