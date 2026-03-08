@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header small-header">
+    <div class="overlay">
+      <h1 class="logo">✈ GateBytes</h1>
+      <p class="tagline">Flight-ready meal kit tracker</p>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        <a href="/logout">Logout</a>    
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="form-card">
+      <h2>Add New Item</h2>
+
+      <form action="/add-item" method="POST">
+        <div class="form-group">
+          <label for="name">Item Name</label>
+          <input type="text" id="name" name="name" placeholder="Ex: Protein Bars" />
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" placeholder="Ex: 3" />
+        </div>
+
+        <div class="form-group">
+          <label for="lowStockThreshold">Low Stock Threshold</label>
+          <input
+            type="number"
+            id="lowStockThreshold"
+            name="lowStockThreshold"
+            placeholder="Ex: 1"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category">
+            <option value="breakfast">Breakfast</option>
+            <option value="snack">Snack</option>
+            <option value="meal">Meal</option>
+            <option value="drink">Drink</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <input type="text" id="notes" name="notes" placeholder="Optional notes" />
+        </div>
+
+        <div class="card-actions">
+          <button type="submit" class="primary-btn">Save Item</button>
+          <a href="/dashboard" class="secondary-btn">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>

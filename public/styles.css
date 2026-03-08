@@ -72,7 +72,9 @@ body {
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
-  margin-top: 15px;
+  text-decoration: none;
+  display: inline-block;
+
 }
 
 .primary-btn:hover {
@@ -200,8 +202,9 @@ body {
 
 .card-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   margin-top: 18px;
+  align-items: center;
 }
 
 .secondary-btn,
@@ -216,9 +219,53 @@ body {
 .secondary-btn {
   background-color: #dbeafe;
   color: #1d3557;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .danger-btn {
   background-color: #e76f51;
   color: white;
+}
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: white;
+  
+}
+
+.add-link {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+}
+
+.secondary-link {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  background-color: #dbeafe;
+  color: #1d3557;
+  font-size: 0.95rem;
+}
+
+.secondary-btn {
+  background-color: #dbeafe;
+  color: #1d3557;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
 }

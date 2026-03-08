@@ -15,15 +15,17 @@
         <a href="/">Home</a>
         <a href="/login">Login</a>
         <a href="/register">Register</a>
+        <a href="/logout">Logout</a>
       </nav>
     </div>
   </header>
+
 
   <main class="main-content">
     <section class="form-card">
       <h2>Create Account</h2>
 
-      <form>
+      <form action="/register" method="POST">
         <div class="form-group">
           <label for="name">Name</label>
           <input type="text" id="name" name="name" placeholder="Enter your name" />

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="site-header small-header">
+    <div class="overlay">
+      <h1 class="logo">✈ GateBytes</h1>
+      <p class="tagline">Flight-ready meal kit tracker</p>
+      <nav class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="form-card">
+      <h2>Edit Item</h2>
+
+      <form action="/edit-item/<%= item._id %>" method="POST">
+        <div class="form-group">
+          <label for="name">Item Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value="<%= item.name %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantity</label>
+          <input
+            type="number"
+            id="quantity"
+            name="quantity"
+            value="<%= item.quantity %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lowStockThreshold">Low Stock Threshold</label>
+          <input
+            type="number"
+            id="lowStockThreshold"
+            name="lowStockThreshold"
+            value="<%= item.lowStockThreshold %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category">
+            <option value="breakfast" <%= item.category === "breakfast" ? "selected" : "" %>>Breakfast</option>
+            <option value="snack" <%= item.category === "snack" ? "selected" : "" %>>Snack</option>
+            <option value="meal" <%= item.category === "meal" ? "selected" : "" %>>Meal</option>
+            <option value="drink" <%= item.category === "drink" ? "selected" : "" %>>Drink</option>
+            <option value="other" <%= item.category === "other" ? "selected" : "" %>>Other</option>
+            <option value="lunch" <%= item.category === "lunch" ? "selected" : "" %>>Lunch</option>
+            <option value="dinner" <%= item.category === "dinner" ? "selected" : "" %>>Dinner</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <input
+            type="text"
+            id="notes"
+            name="notes"
+            value="<%= item.notes || '' %>"
+          />
+        </div>
+
+        <div class="card-actions">
+          <button type="submit" class="primary-btn">Update Item</button>
+          <a href="/dashboard" class="secondary-btn">Cancel</a>
+        </div>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
