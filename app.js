@@ -176,7 +176,7 @@ app.post("/edit-item/:id", async (req, res) => {
     res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
-    res.send("Error updating item");
+    res.send("Error updating item!");
   }
 });
 
