@@ -6,13 +6,13 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     msg: err.message || "Something went wrong, please try again later",
   };
 
-  // Duplicate key error (MongoDB unique constraint)
+  // Duplicate key error 
   if (err.code === 11000) {
     customError.msg = "Email already exists";
     customError.statusCode = 400;
   }
 
-  // Validation errors (Mongoose schema validation)
+  // Validation errors 
   if (err.name === "ValidationError") {
     customError.msg = Object.values(err.errors)
       .map((item) => item.message)
@@ -20,7 +20,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     customError.statusCode = 400;
   }
 
-  // Cast error (invalid Mongo ID format)
+  // Cast error 
   if (err.name === "CastError") {
     customError.msg = `No item found with id: ${err.value}`;
     customError.statusCode = 404;
