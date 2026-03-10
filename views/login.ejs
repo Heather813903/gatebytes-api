@@ -23,6 +23,9 @@
   <main class="main-content">
     <section class="form-card">
       <h2>Login</h2>
+      <% if (typeof error !== "undefined" && error) { %>
+       <p class="form-message error-message"><%= error %></p>
+      <% } %>
       <form action="/login" method="POST">
         <div class="form-group">
           <label for="email">Email</label>

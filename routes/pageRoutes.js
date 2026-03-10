@@ -12,7 +12,10 @@ router.get("/", (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  res.render("login", { title: "Login - GateBytes" });
+  res.render("login", {
+    title: "Login - GateBytes",
+    error: null,
+  });
 });
 
 router.post("/login", async (req, res) => {
@@ -22,24 +25,36 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).send("Invalid email or password");
+      return res.status(401).render("login", {
+        title: "Login - GateBytes",
+        error: "Invalid email or password",
+      });
     }
 
     const isPasswordCorrect = await user.comparePassword(password);
 
     if (!isPasswordCorrect) {
-      return res.status(401).send("Invalid email or password");
+      return res.status(401).render("login", {
+        title: "Login - GateBytes",
+        error: "Invalid email or password",
+      });
     }
 
     res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
-    res.send("Error logging in");
+    return res.status(500).render("login", {
+      title: "Login - GateBytes",
+      error: "Error logging in",
+    });
   }
 });
 
 router.get("/register", (req, res) => {
-  res.render("register", { title: "Register - GateBytes" });
+  res.render("register", {
+    title: "Register - GateBytes",
+    error: null,
+  });
 });
 
 router.post("/register", async (req, res) => {
@@ -50,10 +65,19 @@ router.post("/register", async (req, res) => {
     res.redirect("/login");
   } catch (error) {
     console.log(error);
-    res.send("Error registering user");
+
+    let message = "Error registering user";
+
+    if (error.code === 11000) {
+      message = "Email already exists";
+    }
+
+    return res.status(400).render("register", {
+      title: "Register - GateBytes",
+      error: message,
+    });
   }
 });
-
 router.get("/dashboard", async (req, res) => {
   try {
     const items = await KitItem.find({

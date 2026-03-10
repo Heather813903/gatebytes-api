@@ -269,3 +269,15 @@ body {
   font-size: 1rem;
   text-decoration: none;
 }
+
+.form-message {
+  margin-bottom: 15px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  background-color: #fde2e2;
+  color: #9b2226;
+}
