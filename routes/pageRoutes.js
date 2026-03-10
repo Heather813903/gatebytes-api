@@ -27,7 +27,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res.status(401).render("login", {
         title: "Login - GateBytes",
-        error: "Invalid email or password",
+        error: "Invalid email or password. Please try again.",
       });
     }
 
@@ -36,7 +36,7 @@ router.post("/login", async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(401).render("login", {
         title: "Login - GateBytes",
-        error: "Invalid email or password",
+        error: "Invalid email or password. Please try again.",
       });
     }
 
@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
     console.log(error);
     return res.status(500).render("login", {
       title: "Login - GateBytes",
-      error: "Error logging in",
+      error: "Error logging in. Please try again.",
     });
   }
 });
@@ -66,10 +66,10 @@ router.post("/register", async (req, res) => {
   } catch (error) {
     console.log(error);
 
-    let message = "Error registering user";
+    let message = "Error registering user. Please try again.";
 
     if (error.code === 11000) {
-      message = "Email already exists";
+      message = "Email already exists. Please use a different email.";
     }
 
     return res.status(400).render("register", {
@@ -90,7 +90,7 @@ router.get("/dashboard", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.send("Error loading dashboard");
+    res.send("Something went wrong. Please try again.");
   }
 });
 
@@ -114,7 +114,7 @@ router.post("/add-item", async (req, res) => {
     res.redirect("/dashboard");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error adding item");
+    res.status(500).send("Error adding item. Please try again.");
   }
 });
 
@@ -128,7 +128,7 @@ router.post("/delete-item/:id", async (req, res) => {
     res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
-    res.send("Error deleting item");
+    res.send("Error deleting item. Please try again.");
   }
 });
 
@@ -140,7 +140,7 @@ router.get("/edit-item/:id", async (req, res) => {
     });
 
     if (!item) {
-      return res.send("Item not found");
+      return res.send("Item not found. Please try again.");
     }
 
     res.render("edit-item", {
@@ -149,7 +149,7 @@ router.get("/edit-item/:id", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.send("Error loading item");
+    res.send("Error loading item. Please try again.");
   }
 });
 
@@ -175,7 +175,7 @@ router.post("/edit-item/:id", async (req, res) => {
     res.redirect("/dashboard");
   } catch (error) {
     console.log(error);
-    res.send("Error updating item");
+    res.send("Error updating item. Please try again.");
   }
 });
 
