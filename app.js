@@ -8,6 +8,7 @@ const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const authRoutes = require("./routes/authRoutes");
+const pageRoutes = require("./routes/pageRoutes");
 
 const kitRoutes = require("./routes/kitRoutes");
 const KitItem = require("./models/KitItem");
@@ -18,6 +19,8 @@ const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
 
 const User = require("./models/User");
+
+const TEMP_USER_ID = "699f6182e47fcd21d2ee2dbe";
 
 
 const app = express();
@@ -39,10 +42,6 @@ app.use(helmet());
 app.use(cors());
 app.use(xss());
 app.use(limiter);
-
-app.get("/test", (req, res) => {
-  res.send("Test route works");
-});
 
 
 
@@ -92,7 +91,7 @@ app.post("/register", async (req, res) => {
 app.get("/dashboard", async (req, res) => {
   try {
     const items = await KitItem.find({
-      user: "699f6182e47fcd21d2ee2dbe"
+      user: TEMP_USER_ID
     });
 
     res.render("dashboard", {
@@ -113,7 +112,7 @@ app.post("/add-item", async (req, res) => {
   const { name, quantity, lowStockThreshold, category, notes } = req.body;
 
   try {
-    await KitItem.create({ name, quantity, lowStockThreshold, category, notes, user:"699f6182e47fcd21d2ee2dbe" });
+    await KitItem.create({ name, quantity, lowStockThreshold, category, notes, user: TEMP_USER_ID });
     
     res.redirect("/dashboard");
   } catch (error) {
@@ -125,7 +124,7 @@ app.post("/delete-item/:id", async (req, res) => {
   try {
     await KitItem.findOneAndDelete({
       _id: req.params.id,
-      user: "699f6182e47fcd21d2ee2dbe"
+      user: TEMP_USER_ID
     });
 
     res.redirect("/dashboard");
@@ -138,7 +137,7 @@ app.get("/edit-item/:id", async (req, res) => {
   try {
     const item = await KitItem.findOne({
       _id: req.params.id,
-      user: "699f6182e47fcd21d2ee2dbe"
+      user: TEMP_USER_ID
     });
 
     if (!item) {
@@ -161,7 +160,7 @@ app.post("/edit-item/:id", async (req, res) => {
     await KitItem.findOneAndUpdate(
       {
         _id: req.params.id,
-        user: "699f6182e47fcd21d2ee2dbe"
+        user: TEMP_USER_ID
       },
       {
         name,
@@ -183,7 +182,7 @@ app.post("/edit-item/:id", async (req, res) => {
 app.get("/logout", (req, res) => {
   console.log("logout route hit");
   res.redirect("/login");
-})
+});
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/kits", kitRoutes);

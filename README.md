@@ -92,7 +92,24 @@ Start the server
 
 npm run dev
 
+Submission branch for final project review
+
+Refactoring Improvements
+
+Several improvements were made after the initial submission based on reviewer feedback.
+
+Routes for server-rendered pages were moved into a separate pageRoutes.js file to improve organization.
+
+A reusable constant was created for the user ID used in server-rendered routes to remove repeated hardcoded values.
+
+The authentication middleware typo was corrected so the request object is handled properly.
+
+User feedback messages were added to the login and registration pages to provide clear error messages when authentication fails.
+
+
 Author
 
 Heather Smith
 Code The Dream Node and Express Course
+
+

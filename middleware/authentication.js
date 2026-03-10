@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-const auth = async (requestAnimationFrame, res,next) => {
-    const authHeader = requestAnimationFrame.headers.authorization;
+const auth = async (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ msg: "Authentication invalid" });
@@ -12,7 +12,7 @@ const auth = async (requestAnimationFrame, res,next) => {
     try {
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         
-        requestAnimationFrame.user = { userId: payload.userId };
+        req.user = { userId: payload.userId };
         next();
     } catch (error) {
         return res.status(401).json({ msg: "Authentication invalid" });
