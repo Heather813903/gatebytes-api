@@ -1,44 +1,31 @@
 const KitItem = require("../models/KitItem");
 const User = require("../models/User");
 const faker = require("@faker-js/faker").fakerEN_US;
+const FactoryBot = require("factory-bot");
 require("dotenv").config();
 
 const testUserPassword = faker.internet.password();
 
-const factory = {
-  build: async (type, overrides = {}) => {
-    if (type === "user") {
-      return {
-        name: faker.person.fullName(),
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        ...overrides,
-      };
-    }
+const factory = FactoryBot.factory;
+const factoryAdapter = new FactoryBot.MongooseAdapter();
+factory.setAdapter(factoryAdapter);
 
-    if (type === "kitItem") {
-      const categories = [
-        "snack",
-        "meal",
-        "drink",
-        "other",
-        "breakfast",
-        "lunch",
-        "dinner",
-      ];
+factory.define("kitItem", KitItem, {
+  name: () => faker.food.dish(),
+  quantity: () => Math.floor(Math.random() * 5) + 1,
+  lowStockThreshold: () => 1,
+  category: () =>
+    ["snack", "meal", "drink", "other", "breakfast", "lunch", "dinner"][
+      Math.floor(Math.random() * 7)
+    ],
+  notes: () => faker.lorem.words(3),
+});
 
-      return {
-        name: faker.food.dish(),
-        quantity: Math.floor(Math.random() * 5) + 1,
-        lowStockThreshold: 1,
-        category: categories[Math.floor(Math.random() * categories.length)],
-        ...overrides,
-      };
-    }
-
-    throw new Error(`Unknown factory type: ${type}`);
-  },
-};
+factory.define("user", User, {
+  name: () => faker.person.fullName(),
+  email: () => faker.internet.email(),
+  password: () => faker.internet.password(),
+});
 
 const seed_db = async () => {
   let testUser = null;
@@ -47,34 +34,8 @@ const seed_db = async () => {
     await KitItem.deleteMany({});
     await User.deleteMany({});
 
-    testUser = await User.create({
-      name: faker.person.fullName(),
-      email: faker.internet.email(),
-      password: testUserPassword,
-    });
-
-    const items = [];
-    const categories = [
-      "snack",
-      "meal",
-      "drink",
-      "other",
-      "breakfast",
-      "lunch",
-      "dinner",
-    ];
-
-    for (let i = 0; i < 20; i++) {
-      items.push({
-        name: faker.food.dish(),
-        quantity: Math.floor(Math.random() * 5) + 1,
-        lowStockThreshold: 1,
-        category: categories[Math.floor(Math.random() * categories.length)],
-        user: testUser._id,
-      });
-    }
-
-    await KitItem.insertMany(items);
+    testUser = await factory.create("user", { password: testUserPassword });
+    await factory.createMany("kitItem", 20, { user: testUser._id });
   } catch (e) {
     console.log("database error");
     console.log(e.message);

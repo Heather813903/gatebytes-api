@@ -1,33 +1,43 @@
 const { app } = require("../app");
 const get_chai = require("../util/get_chai");
 const KitItem = require("../models/KitItem");
-
-const TEMP_USER_ID = "699f6182e47fcd21d2ee2dbe";
+const { seed_db, testUserPassword } = require("../util/seed_db");
 
 describe("crud operations", function () {
   before(async () => {
-    await KitItem.deleteMany({});
+    const { request } = await get_chai();
 
-    const items = [];
+    this.test_user = await seed_db();
 
-    for (let i = 1; i <= 20; i++) {
-      items.push({
-        name: `Test Item ${i}`,
-        quantity: i,
-        lowStockThreshold: 1,
-        category: "snack",
-        notes: `Seed item ${i}`,
-        user: TEMP_USER_ID,
-      });
-    }
+    const loginData = {
+      email: this.test_user.email,
+      password: testUserPassword,
+    };
 
-    await KitItem.insertMany(items);
+    const req = request
+      .execute(app)
+      .post("/login")
+      .set("content-type", "application/x-www-form-urlencoded")
+      .redirects(0)
+      .send(loginData);
+
+    const res = await req;
+
+    const cookies = res.headers["set-cookie"];
+    this.sessionCookie = cookies.find((element) =>
+      element.startsWith("connect.sid")
+    );
   });
 
   it("should get the dashboard page", async () => {
     const { expect, request } = await get_chai();
 
-    const req = request.execute(app).get("/dashboard").send();
+    const req = request
+      .execute(app)
+      .get("/dashboard")
+      .set("Cookie", this.sessionCookie)
+      .send();
+
     const res = await req;
 
     expect(res).to.have.status(200);
@@ -38,7 +48,12 @@ describe("crud operations", function () {
   it("should show 20 seeded items on the dashboard", async () => {
     const { expect, request } = await get_chai();
 
-    const req = request.execute(app).get("/dashboard").send();
+    const req = request
+      .execute(app)
+      .get("/dashboard")
+      .set("Cookie", this.sessionCookie)
+      .send();
+
     const res = await req;
 
     expect(res).to.have.status(200);
@@ -50,7 +65,12 @@ describe("crud operations", function () {
   it("should get the add item page", async () => {
     const { expect, request } = await get_chai();
 
-    const req = request.execute(app).get("/add-item").send();
+    const req = request
+      .execute(app)
+      .get("/add-item")
+      .set("Cookie", this.sessionCookie)
+      .send();
+
     const res = await req;
 
     expect(res).to.have.status(200);
@@ -73,6 +93,7 @@ describe("crud operations", function () {
     const req = request
       .execute(app)
       .post("/add-item")
+      .set("Cookie", this.sessionCookie)
       .set("content-type", "application/x-www-form-urlencoded")
       .send(dataToPost);
 
@@ -82,11 +103,11 @@ describe("crud operations", function () {
     expect(res).to.have.property("redirects");
     expect(res.redirects[0]).to.include("/dashboard");
 
-    const items = await KitItem.find({ user: TEMP_USER_ID });
+    const items = await KitItem.find({ user: this.test_user._id });
     expect(items.length).to.equal(21);
 
     const newItem = await KitItem.findOne({
-      user: TEMP_USER_ID,
+      user: this.test_user._id,
       name: "Protein Bars",
     });
 

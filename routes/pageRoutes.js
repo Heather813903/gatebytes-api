@@ -4,8 +4,6 @@ const router = express.Router();
 const KitItem = require("../models/KitItem");
 const User = require("../models/User");
 
-// Temporary user ID for testing purposes
-const TEMP_USER_ID = "699f6182e47fcd21d2ee2dbe";
 
 router.get("/", (req, res) => {
   res.render("layout", { title: "GateBytes" });
@@ -31,16 +29,28 @@ router.post("/login", async (req, res) => {
       });
     }
 
-    const isPasswordCorrect = await user.comparePassword(password);
+   const isPasswordCorrect = await user.comparePassword(password);
 
-    if (!isPasswordCorrect) {
-      return res.status(401).render("login", {
-        title: "Login - GateBytes",
-        error: "Invalid email or password. Please try again.",
-      });
-    }
+if (!isPasswordCorrect) {
+  return res.status(401).render("login", {
+    title: "Login - GateBytes",
+    error: "Invalid email or password. Please try again.",
+  });
+}
 
-    res.redirect("/dashboard");
+req.session.userId = user._id.toString();
+
+req.session.save((err) => {
+  if (err) {
+    console.log(err);
+    return res.status(500).render("login", {
+      title: "Login - GateBytes",
+      error: "Error logging in. Please try again.",
+    });
+  }
+
+  res.redirect("/dashboard");
+});
   } catch (error) {
     console.log(error);
     return res.status(500).render("login", {
@@ -80,9 +90,13 @@ router.post("/register", async (req, res) => {
 });
 router.get("/dashboard", async (req, res) => {
   try {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+}
+
     const items = await KitItem.find({
-      user: TEMP_USER_ID,
-    });
+      user: req.session.userId,
+});
 
     res.render("dashboard", {
       title: "Dashboard - GateBytes",
@@ -102,13 +116,17 @@ router.post("/add-item", async (req, res) => {
   const { name, quantity, lowStockThreshold, category, notes } = req.body;
 
   try {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+
     await KitItem.create({
       name,
       quantity,
       lowStockThreshold,
       category,
       notes,
-      user: TEMP_USER_ID,
+      user: req.session.userId,
     });
 
     res.redirect("/dashboard");
@@ -117,12 +135,15 @@ router.post("/add-item", async (req, res) => {
     res.status(500).send("Error adding item. Please try again.");
   }
 });
-
 router.post("/delete-item/:id", async (req, res) => {
   try {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+
     await KitItem.findOneAndDelete({
       _id: req.params.id,
-      user: TEMP_USER_ID,
+      user: req.session.userId,
     });
 
     res.redirect("/dashboard");
@@ -134,9 +155,13 @@ router.post("/delete-item/:id", async (req, res) => {
 
 router.get("/edit-item/:id", async (req, res) => {
   try {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+
     const item = await KitItem.findOne({
       _id: req.params.id,
-      user: TEMP_USER_ID,
+      user: req.session.userId,
     });
 
     if (!item) {
@@ -157,10 +182,14 @@ router.post("/edit-item/:id", async (req, res) => {
   const { name, quantity, lowStockThreshold, category, notes } = req.body;
 
   try {
+    if (!req.session.userId) {
+      return res.redirect("/login");
+    }
+
     await KitItem.findOneAndUpdate(
       {
         _id: req.params.id,
-        user: TEMP_USER_ID,
+        user: req.session.userId,
       },
       {
         name,
